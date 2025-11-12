@@ -1,181 +1,146 @@
-14
-4. a) Setup navigation between different screens using navigator 
-PROGRAM: 
-import 'package:flutter/material.dart'; 
-void main() { 
-  runApp(MyApp()); 
-} 
+4
 
-class MyApp extends StatelessWidget { 
-  @override 
-  Widget build(BuildContext context) { 
-    return MaterialApp( 
-      title: 'Navigation Example', 
-      theme: ThemeData( 
-        primarySwatch: Colors.blue, 
-      ), 
-      home: FirstScreen(), 
-    ); 
-  } 
-} 
-
-class FirstScreen extends StatelessWidget { 
-  @override 
-  Widget build(BuildContext context) { 
-    return Scaffold( 
-      appBar: AppBar( 
-        title: Text('First Screen'), 
-      ), 
-      body: Center( 
-        child: ElevatedButton( 
-          onPressed: () { 
-            // Navigate to the second screen 
-            Navigator.push( 
-              context, 
-              MaterialPageRoute(builder: (context) => SecondScreen()), 
-            ); 
-          }, 
-          child: Text('Go to Second Screen'), 
-        ), 
-      ), 
-    ); 
-  }
-} 
-
-class SecondScreen extends StatelessWidget { 
-  @override 
-  Widget build(BuildContext context) { 
-    return Scaffold( 
-      appBar: AppBar( 
-        title: Text('Second Screen'), 
-      ), 
-      body: Center( 
-        child: ElevatedButton( 
-          onPressed: () { 
-            // Navigate back to the first screen 
-            Navigator.pop(context); 
-          }, 
-          child: Text('Go back to First Screen'), 
-        ), 
-      ), 
-    ); 
-  } 
-} 
-
------------------------
-3b
+li = list(map(int,input("Enter 7 bits data of 0's and 1's separated 
+by spaces: ").split())) 
+rec = list(map(int,input("Enter the received 11 data bits of 0's 
+and 1's separated by spaces: ").split())) 
+# reverse the list 
+li = li[::-1] 
+# parity bits of 0 are added at the place of 2 pow's i.e. at 
+positions of 1,2,4,8 remaining places data bits are added 
+li = [0,0] + li[0:1] + [0] + li[1:4] + [0] + li[4:] 
+#now find the even parity bit position 
+li[0] = (li[2] + li[4] + li[6] + li[8] + li[10]) % 2 
+li[1] = (li[2] + li[5] + li[6] + li[9] + li[10]) % 2 
+li[3] = (li[4] + li[5] + li[6]) % 2 
+li[7] = (li[8] + li[9] + li[10]) % 2 
+# reverse the list 
+li = li[::-1] 
+#reverse the receiver side data and check the parity bits position 
+values 
+rec = rec[::-1] 
+r1 = (rec[0] + rec[2] + rec[4] + rec[6] + rec[8] + rec[10]) % 2 
+r2 = (rec[1] + rec[2] + rec[5] + rec[6] + rec[9] + rec[10]) % 2 
+r3 = (rec[3] + rec[4] + rec[5] + rec[6]) % 2 
+r4 = (rec[7] + rec[8] + rec[9] + rec[10]) % 2 
  
-3. b) Implement media queries and breakpoints for responsiveness. 
-PROGRAM: 
-import 'package:flutter/material.dart'; 
-void main() { 
-  runApp(MyApp()); 
-} 
+bit = str(r4) + str(r3) + str(r2) + str(r1) 
+bit = int(bit,2) 
+if bit : 
+print("received data is having error at position: ", bit) 
+else: 
+print("received data doesn't have any error")
 
-class MyApp extends StatelessWidget { 
-  @override 
-  Widget build(BuildContext context) { 
-    return MaterialApp( 
-      title: 'Responsive UI with Media Queries', 
-      theme: ThemeData( 
-        primarySwatch: Colors.blue, 
-      ), 
-      home: ResponsiveHomePage(), 
-    ); 
-  } 
-} 
+OUTPUT: 
+Enter 7 bits data of 0’s and 1’s separated by spaces: 1 0 1 0 
+1 0 1 
+Enter the received 11 data bits of 0's and 1's separated by 
+spaces 1 0 1 0 0 1 0 1 1 0 1 
+Received data is having error at position: 2 
+Enter 7 bits data of 0's and 1's separated by spaces: 1 0 1 0 
+1 0 1 
+Enter the received 11 data bits of 0's and 1's separated by 1 
+1 1 spaces: 1 0 1 0 0 1 0 1 
+received data doesn't have any error
 
-class ResponsiveHomePage extends StatelessWidget { 
-  @override 
-  Widget build(BuildContext context) { 
-    return Scaffold( 
-      appBar: AppBar( 
-        title: Text('Responsive UI with Media Queries'), 
-      ), 
-      body: LayoutBuilder( 
-        builder: (BuildContext context, BoxConstraints constraints) { 
-          if (constraints.maxWidth < 600) { 
-            return _buildMobileLayout(); 
-          } else if (constraints.maxWidth < 1200) { 
-            return _buildTabletLayout(); 
-          } else { 
-            return _buildDesktopLayout(); 
-          } 
-        }, 
-      ), 
-    ); 
-  } 
+----------------------------------------------------------------------------
 
-  Widget _buildMobileLayout() { 
-    return Center( 
-      child: Column( 
-        mainAxisAlignment: MainAxisAlignment.center, 
-        children: <Widget>[ 
-          FlutterLogo(size: 100), 
-          SizedBox(height: 20), 
-          Text( 
-            'Mobile Layout', 
-            style: TextStyle(fontSize: 24), 
-          ), 
-          SizedBox(height: 20), 
-          ElevatedButton( 
-            onPressed: () {}, 
-            child: Text('Button'), 
-          ), 
-        ], 
-      ), 
-    ); 
-  } 
+SENDER SIDE: 
+import socket 
+import random 
+import time 
+ 
+s = socket.socket() 
+s.bind(("localhost", 1450)) 
+s.listen(5) 
+c, adr = s.accept() 
+print(str(adr)) 
+n = int(input("Enter number of frames: ")) 
+N = int(input("Enter window size: ")) 
+seq = 1 # is used to keep track of the window starting 
+frame = 1 # frame to send starts with 1 
+# send first N window size frames 
+for i in range(N): 
+print('Frames sent ->', frame) 
+c.send(str(frame).encode()) 
+frame += 1 
+time.sleep(2) 
+timer = 5 
+ 
+# will start with acknowledgement frame of 1 
+while frame <= n:
+t = random.randint(1, 7) 
+msg = c.recv(1).decode() 
+msg = int(msg) 
+ 
+if (msg != seq): 
+# here we try to discard the already sent frames after 
+failed frame 
+continue 
+if (timer > t): 
+# if the timer is greater than random number be consider 
+it as ack 
+print("acknowledgement received") 
+print('Frames sent ->', str(frame)) 
+# we will send next frame 
+c.send(str(frame).encode()) 
+seq += 1 
+frame += 1 
+time.sleep(2) 
+else: 
+# if timer is less than the random number we consider as 
+not received ack 
+print('acknowledgement not received') 
+frame = seq 
+# we will again send the frames from window 
+starting i.e. seq 
+for i in range(N): 
+print('Frames sent ->', frame) 
+c.send(str(frame).encode()) 
+frame += 1 
+time.sleep(2)
 
-  Widget _buildTabletLayout() { 
-    return Center( 
-      child: Row( 
-        mainAxisAlignment: MainAxisAlignment.center, 
-        children: <Widget>[ 
-          FlutterLogo(size: 100), 
-          SizedBox(width: 20), 
-          Column( 
-            mainAxisAlignment: MainAxisAlignment.center, 
-            children: <Widget>[ 
-              Text( 
-                'Tablet Layout', 
-                style: TextStyle(fontSize: 24), 
-              ), 
-              SizedBox(height: 20), 
-              ElevatedButton( 
-                onPressed: () {}, 
-                child: Text('Button'), 
-              ), 
-            ], 
-          ), 
-        ], 
-      ), 
-    ); 
-  } 
+RECEIVER SIDE: 
+ 
+ 
+import socket 
+import time 
+s=socket.socket() 
+s.connect(("localhost", 1450)) 
+while 1: 
+msg=s.recv(2).decode() 
+print("Received --> ",int(msg)) 
+s.send(str(msg).encode()) 
+time.sleep(1)
 
-  Widget _buildDesktopLayout() { 
-    return Center( 
-      child: Row( 
-        mainAxisAlignment: MainAxisAlignment.center, 
-        children: <Widget>[ 
-          FlutterLogo(size: 100), 
-          SizedBox(width: 20), 
-          Column( 
-            mainAxisAlignment: MainAxisAlignment.center, 
-            children: <Widget>[ 
-              Text( 
-                'Desktop Layout', 
-                style: TextStyle(fontSize: 24), 
-              ), 
-              SizedBox(height: 20), 
-              ElevatedButton( 
-                onPressed: () {}, 
-                child: Text('Button'), 
-              ), 
-            ], 
-          ), 
-        ], 
-      ), 
-    ); 
-  } 
-} 
+
+OUTPUT: 
+ 
+ 
+SENDER SIDE: RECEIVER SIDE: 
+ 
+ 
+Enter number of frames: 8 Received --> 1 
+Enter window size: 4 Received --> 2 
+Frames sent -> 1 Received --> 3 
+Frames sent -> 2 Received --> 4 
+Frames sent -> 3 Received --> 5 
+Frames sent -> 4 Received --> 6 
+acknowledgement received Received --> 3 
+Frames sent -> 5 Received --> 4 
+acknowledgement received Received --> 5 
+Frames sent -> 6 Received --> 6 
+acknowledgement not received Received --> 3
+Frames sent -> 3 Received --> 4 
+Frames sent -> 4 Received --> 5 
+Frames sent -> 5 Received --> 6 
+Frames sent -> 6 Received --> 7 
+acknowledgement not received Received --> 8 
+Frames sent -> 3 
+Frames sent -> 4 
+Frames sent -> 5 
+Frames sent -> 6 
+acknowledgement received 
+Frames sent -> 7 
+acknowledgement received 
+Frames sent -> 8
